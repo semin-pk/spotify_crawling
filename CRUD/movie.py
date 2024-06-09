@@ -11,7 +11,7 @@ db = mongodb.get_database('hellody')
 engine = engineconn()
 session_maker = engine.sessionmaker()
 
-def get_overview():
+'''def get_overview():
     collection = db['MOVIES']
     vod_views = list(collection.find({},{'_id': 0, 'MOVIE_ID':1, 'MOVIE_OVERVIEW':1}))
     return vod_views
@@ -36,7 +36,7 @@ def insert_movie_emotion(MOVIE_ID, emotion):
             }
         }
     )
-
+'''
 
 def get_spotifyinfo() -> list:
     collection = db['SPOTIFY']
