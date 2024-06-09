@@ -11,31 +11,6 @@ db = mongodb.get_database('hellody')
 engine = engineconn()
 session_maker = engine.sessionmaker()
 
-def get_overview():
-    collection = db['MOVIES']
-    vod_views = list(collection.find({},{'_id': 0, 'MOVIE_ID':1, 'MOVIE_OVERVIEW':1}))
-    return vod_views
-
-def insert_movie_emotion(MOVIE_ID, emotion):
-    collection = db['MOVIES']
-    session_maker.execute(
-        update(MOVIES)
-        .where(MOVIES.MOVIE_ID == MOVIE_ID)
-        .values(
-            {
-                MOVIES.EMOTION : emotion
-            }
-        )
-    )
-    collection.update_one(
-        {'MOVIE_ID':MOVIE_ID},
-        {
-            '$set':
-            {
-            'EMOTION':emotion
-            }
-        }
-    )
 
 
 def get_spotifyinfo() -> list:
@@ -73,6 +48,7 @@ def update_refreshtoken(user_id, access_token, expires_at):
             }
         )
     )
+    session_maker.commit()
 
 def update_emotion(user_id, emotion):
     session_maker.execute(
@@ -85,3 +61,33 @@ def update_emotion(user_id, emotion):
         )
     )
     session_maker.commit()
+
+
+#영화 감정 분석
+'''def get_overview():
+    collection = db['MOVIES']
+    vod_views = list(collection.find({},{'_id': 0, 'MOVIE_ID':1, 'MOVIE_OVERVIEW':1}))
+    return vod_views
+
+def insert_movie_emotion(MOVIE_ID, emotion):
+    collection = db['MOVIES']
+    session_maker.execute(
+        update(MOVIES)
+        .where(MOVIES.MOVIE_ID == MOVIE_ID)
+        .values(
+            {
+                MOVIES.EMOTION : emotion
+            }
+        )
+    )
+    session_maker.commit()
+    collection.update_one(
+        {'MOVIE_ID':MOVIE_ID},
+        {
+            '$set':
+            {
+            'EMOTION':emotion
+            }
+        }
+    )
+'''

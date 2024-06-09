@@ -10,9 +10,9 @@ from kobert_tokenizer import KoBERTTokenizer
 from load_model import load_model_s3
 # GPU든 CPU 사용
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
+print(f"Using device: {device}")
 # BERT 모델을 불러오기.
-model = BertModel.from_pretrained('skt/kobert-base-v1')
+model = BertModel.from_pretrained('skt/kobert-base-v1').to(device)
 # BERT 모델을 위한 토크나이저를 불러오기
 tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
 
@@ -31,10 +31,10 @@ class BERTClassifier(nn.Module):
 
 # 모델 불러오기
 
-model_path = load_model_s3()
-#model_path = './.model/model_state_dict.pt'
+#model_path = load_model_s3()
+model_path = './model/model_state_dict.pt'
 classifier_model = BERTClassifier(model).to(device)
-classifier_model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
+classifier_model.load_state_dict(torch.load(model_path, map_location=device))
 classifier_model.eval()
 
 #classifier_model = joblib.load('./model_spotify.pkl')
@@ -72,13 +72,13 @@ def testModel(ly, top_k=2):
 def predict_emotion(lyrics_list):
     #lyrics_list = []
     # 모든 노래의 감정을 합산하여 가장 많이 등장한 감정 2개 선택
-    all_emotion_counts = Counter()
-    for lyric in lyrics_list:
+    #all_emotion_counts = Counter()
+    '''for lyric in lyrics_list:
         emotion_counts = testModel(lyric, top_k=2)
-        all_emotion_counts += emotion_counts
-
+        all_emotion_counts += emotion_counts'''
+    emotion_counts = testModel(lyrics_list, top_k=2)
     # 가장 많이 등장한 감정 2개 선택
-    most_common_emotions = all_emotion_counts.most_common(2)
+    most_common_emotions = emotion_counts.most_common(2)
     most_common_emotions_str = ', '.join([emotion for emotion, _ in most_common_emotions])
 
     return(most_common_emotions_str)

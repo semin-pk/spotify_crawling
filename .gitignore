@@ -1,5 +1,6 @@
 .env
 .venv
+model
 __pycache__
 CRUD/__pycache__
 DB/__pycache__
