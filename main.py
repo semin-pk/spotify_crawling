@@ -3,9 +3,8 @@ from spotify_api import *
 from lyrics_crawler import *
 from predict_emotion import *
 from CRUD.spotify import get_spotifyinfo, get_recommend_vodlist
-from CRUD.movie import get_overview, insert_movie_emotion
+#from CRUD.movie import get_overview, insert_movie_emotion
 from datetime import datetime
-
 spotify_lists = get_spotifyinfo()
 for spotify_list in spotify_lists:
     timestamp_datetime = datetime.fromtimestamp(spotify_list['EXPIRE_DATE'])

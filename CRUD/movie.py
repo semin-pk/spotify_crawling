@@ -12,7 +12,6 @@ engine = engineconn()
 session_maker = engine.sessionmaker()
 
 
-
 def get_spotifyinfo() -> list:
     collection = db['SPOTIFY']
     user_list = list(collection.find({}, {'_id': 0, 'USER_ID':1, 'ACCESS_TOKEN':1, 'REFRESH_TOKEN':1, 'EXPIRE_DATE':1, 'EMOTION':1}))
